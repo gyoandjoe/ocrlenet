@@ -27,7 +27,7 @@ class WeigthsRepo(object):
 
         conn = sqlite3.connect(self.database_name)
         c = conn.cursor()
-        query = "INSERT INTO Weights VALUES (NULL,{0},\'{1}\',{2},{3},{4},{5},\'{6}\',\'{7}\',{8},{7},{8},{9},{10})".format(str(self.id_experiment),fecha,epoch,batch,iteracion,trainCost,fullName,hyper_params,trainError,costVal,errorVal,costTest,errorTest)
+        query = "INSERT INTO Weights VALUES (NULL,{0},\'{1}\',{2},{3},{4},{5},\'{6}\',\'{7}\',{8},{9},{10},{11},{12})".format(str(self.id_experiment),fecha,epoch,batch,iteracion,trainCost,fullName,hyper_params,trainError,costVal,errorVal,costTest,errorTest)
 
         c.execute(query)
         conn.commit()

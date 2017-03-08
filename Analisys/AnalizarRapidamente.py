@@ -8,5 +8,5 @@ epoca el el costo promedio de sus iteraciones con sus respectivos pesos diferent
 """
 analizador = Analizador.Analizador('../OCR.db')
 #analizador.Iniciar(20)
-analizador.Iniciar(21)
+analizador.Iniciar(4)
 print "Fin analisis :)"

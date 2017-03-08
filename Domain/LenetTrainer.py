@@ -8,7 +8,7 @@ from Domain import LenetCNN
 from Domain import LayerEnum
 
 class LenetTrainer(object):
-    def __init__(self,learning_rate, with_lr_decay,dataset_file, batch_size, dataset_size, logger, max_epochs,weigthts_service, saveWeigthsFrecuency=10,initial_weights=None,frecuency_lr_decay =2):
+    def __init__(self,learning_rate, with_lr_decay,dataset_file, batch_size, dataset_size, logger, max_epochs,weigthts_service, experimentsRepo, saveWeigthsFrecuency=10,initial_weights=None,frecuency_lr_decay =2):
         self.initial_weights=initial_weights
         self.dataset_size = int(dataset_size)
         self.batch_size = int(batch_size)
@@ -24,6 +24,7 @@ class LenetTrainer(object):
         rawTrainingDataSet = rawData[0]
         rawTestDataSet = rawData[1]
         rawValidationDataSet = rawData[2]
+        self.experimentsRepo = experimentsRepo
 
         self.no_batchs =  self.dataset_size / self.batch_size
 
@@ -43,7 +44,7 @@ class LenetTrainer(object):
             self.SaveWeights(-1,-1,-1,-1)
             initParamsWeigthsInStringFormat = self.weigthts_service.GetInitParamsWeigthsInStringFormat()
             print("Parametros de inicio:" + initParamsWeigthsInStringFormat)
-            self.logger.Log("initParamsForInitWeigths" + initParamsWeigthsInStringFormat + " learning rate: " +str(self.learning_rate) + ","+extra_info , "InicioEntrenamiento",current_epoch,-1)
+            self.logger.Log("initParamsForInitWeigths" + initParamsWeigthsInStringFormat + " learning rate: " +str(self.learning_rate) + ","+extra_info, "InicioEntrenamiento", current_epoch, -1)
 
 
         for epoch_index in xrange(self.max_epochs):
@@ -52,13 +53,19 @@ class LenetTrainer(object):
 
             if epoch_index != 0 and self.with_lr_decay == True and epoch_index % self.frecuency_lr_decay == 0:
                self.learning_rate *= 0.1
+            elif self.with_lr_decay == False:
+                decreaseNow = self.experimentsRepo.ObtenerDecreaseNow()
+                if decreaseNow == True:
+                    self.experimentsRepo.SetFalseDecreaseNow()
+                    self.learning_rate *= 0.1
+
 
             for batch_index in xrange(self.no_batchs):
                 cost = self.lenetcnn.train_model(batch_index,self.learning_rate)
                 print "costo: "+str(cost)+" epoca: " + str(epoch_index)
                 self.logger.Log(str(cost), "costo",str(epoch_index), str(batch_index),id_train,"learning rate: " +str(self.learning_rate) + ","+extra_info)
             if (epoch_index + 1) % self.saveWeigthsFrecuency == 0:
-                self.SaveWeights(epoch_index,batch_index)
+                self.SaveWeights(epoch_index,batch_index,-1)
 
 
     def SaveWeights(self, epoch, batch, iteration, cost=0,error=0,costVal=0,errorVal=0,costTest=0,errorTest=0):

@@ -5,6 +5,7 @@ class ExperimentsRepo(object):
     def __init__(self,database_name, id_experiment):
         self.database_name = database_name
         self.experiment = self.BuscarExperimento(id_experiment)
+        self.id_experiment =id_experiment
 
     def BuscarExperimento(self, id_experimento):
         conn = sqlite3.connect(self.database_name)
@@ -60,9 +61,25 @@ class ExperimentsRepo(object):
         return self.experiment[9]
 
     def ObtenerFrecuencyLRDecay(self):
+         if self.experiment is None:
+            return None
+         return self.experiment[10]
+
+    def SetFalseDecreaseNow(self):
+        conn = sqlite3.connect(self.database_name)
+        c = conn.cursor()
+        query = "UPDATE Experiments SET DeseaseNow = {0} WHERE Id = {1}".format('False', self.id_experiment)
+
+        c.execute(query)
+        conn.commit()
+        conn.close()
+
+    def ObtenerDecreaseNow(self):
         if self.experiment is None:
             return None
-        return self.experiment[10]
+        if self.experiment[11] == 'True':
+            return True
+        return False
 
 
 

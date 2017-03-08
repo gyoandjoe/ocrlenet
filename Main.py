@@ -6,7 +6,7 @@ from Weights import WeigthsService
 
 __author__ = 'win-g'
 
-id_experiment = 21
+id_experiment = 5
 bd = 'OCR.db'
 logger = Logger.Logger(id_experiment,bd)
 experiment_repo= Experiments.ExperimentsRepo.ExperimentsRepo(bd,id_experiment)
@@ -29,20 +29,19 @@ lt = LenetTrainer(
     logger=logger,
     max_epochs= experiment_repo.ObtenerMaxEpoch(),
     weigthts_service = weigths_service,
-    initial_weights = weigths_service.LoadWeigths(663), #None
+    experimentsRepo = experiment_repo,
+    initial_weights = None, #weigths_service.LoadWeigths(25),  # weigths_service.LoadWeigths(9), #None,
     saveWeigthsFrecuency=experiment_repo.ObtenerFrecuencySaveWeigths(),
     learning_rate= experiment_repo.ObtenerLearningRate(),
     with_lr_decay = experiment_repo.ObtenerWithLRDecay(),
     frecuency_lr_decay=experiment_repo.ObtenerFrecuencyLRDecay()
     )
-#lt.lenetcnn.cnn.lowAndHigh_c1Values =  #0.01
-#lt.lenetcnn.cnn.lowAndHigh_c3Values = #0.001
-#lt.lenetcnn.cnn.lowAndHigh_fc5Values = #0.0001
-#lt.lenetcnn.cnn.lowAndHigh_fc6Values = #0.00001
+
 
 lt.Train(
-    current_epoch= 0,#None, #Este parametro solo tiene sentido cuando existen initial_weights
+    current_epoch= 0,#0, #Este parametro solo tiene sentido cuando existen initial_weights
     id_train='learning rate automatico :)',
-    extra_info='(+)')
+    extra_info='(+)'
+)
 
 print "OK"

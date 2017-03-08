@@ -18,11 +18,13 @@ class Analizador(object):
         registros = self.analisys_repo.ObtenerDatos(id_experiment)
         df = pd.DataFrame(registros, columns=['Id','IdExperient','Fecha','Contenido','TipoLog','EpochIndex','BatchIndex','ExtraInfo','Referencia']) #,dtype=[('Contenido', np.float64)]
         df.convert_objects(convert_numeric=True)
-
+        df['Contenido'] = df['Contenido'].astype(np.float64)
         grouped = df.groupby('EpochIndex')
         #for registro in df['contenido'].values:
         #    print registro
         xx=grouped.groups.keys()
+
+
         yy=grouped['Contenido'].mean().values
 
         x = np.asarray(xx, dtype=int)

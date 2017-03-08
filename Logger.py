@@ -13,7 +13,6 @@ class Logger(object):
         conn = sqlite3.connect(self.Database_Name)
         c = conn.cursor()
         query = "INSERT INTO LogExperiment VALUES (NULL,{0},\'{1}\',\'{2}\',\'{3}\',{4},{5},\'{6}\',\'{7}\')".format(str(self.Id_Experiment),datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),contenido,tipo_log,epoch_index,batch_index,extra_info,referencia)
-        #query = 'INSERT INTO LogExperiment VALUES (NULL, \''+str(self.Id_Experiment)+'\',\''+ datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")+'\',"'+ contenido+'","'+ tipo_log +'","'+referencia+'")'
         c.execute(query)
 
         # Save (commit) the changes

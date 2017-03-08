@@ -11,7 +11,7 @@ class AnalisysRepo(object):
     def ObtenerDatos(self, id_experiment):
         conn = sqlite3.connect(self.Database_Name)
         c = conn.cursor()
-        query = "select * from LogExperiment where IdExperient =?"
+        query = "select * from LogExperiment where BatchIndex >= 0 and IdExperient =? "
 
         c.execute(query, [str(id_experiment)])
         registros= c.fetchall()
